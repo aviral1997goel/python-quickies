@@ -3,6 +3,8 @@ from PyPDF2 import PdfReader, PdfWriter
 
 # Function to unlock a PDF file
 def unlock_pdf(locked_path, unlocked_path, password):
+    if "../" in locked_path or "..\\" in locked_path:
+        raise Exception("Invalid file path")
     with open(locked_path, "rb") as locked_file:
         reader = PdfReader(locked_file)
         
@@ -14,6 +16,8 @@ def unlock_pdf(locked_path, unlocked_path, password):
                 for page_num in range(len(reader.pages)):
                     writer.add_page(reader.pages[page_num])
 
+                if "../" in unlocked_path or "..\\" in unlocked_path:
+                    raise Exception("Invalid file path")
                 with open(unlocked_path, "wb") as unlocked_file:
                     writer.write(unlocked_file)
 
